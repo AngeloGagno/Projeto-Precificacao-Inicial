@@ -1,14 +1,52 @@
 import streamlit as st
 from backend.calculate_price import Price
-
-st.header('Precificacao Inicial')
-st.subheader('Projeto com o Objetivo de dar um panorama inicial do valor da diária dos apartamentos e enviar-los para um banco de dados para armanezar seus resultados')
-tier = [3,4,5]
-N_acc = st.text_input('Digite o Nome da Acomodacao(sem a Zona)', placeholder="Nome")
-tier_acc = st.selectbox('Selecione o Tier do Acomodacao',options=tier, placeholder= 'Tier')
-value = st.number_input('Digite o Valor encontrado', placeholder="Valor", step=1,min_value=0,max_value=10000000)
+from backend.main import main
+import streamlit as st
 
 
-if st.button("Enviar"):
+st.title("🏠 Precificação de Acomodações")
+
+st.markdown(
+    """
+    Preencha as informações abaixo para calcular e armazenar os valores de diárias das acomodações.
+    """
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    N_acc = st.text_input(
+        "🏢 **Nome da Acomodação**",
+        placeholder="Digite o nome",
+        help="Defina o nome do apartamento no sistema."
+    )
+
+with col2:
+    tier_acc = st.selectbox(
+        "⭐ **Tier da Acomodação**",
+        options=[3,4,5],
+        placeholder="Selecione o Tier",
+        help="O Tier do apartamento é a classificação em estrelas."
+    )
+
+value = st.number_input(
+    "💰 **Valor da Diária**",
+    placeholder="Digite o valor no AirDna",
+    step=1,
+    min_value=1000,
+    max_value=10000000,
+    help="Insira o valor precificado no AirDna para a acomodação."
+)
+
+st.divider()
+if st.button("📤 **Enviar Dados**"):
     price = Price(value=value,tier=tier_acc)   
-    st.write(price.base_price())
+    min_price = price.minimum_price()
+    base_price = price.base_price()
+    data = {'name':N_acc, 
+            'price': value,
+            'tier':tier_acc,
+            'min_price':min_price,
+            'base_price': base_price
+            }
+    main(data)
