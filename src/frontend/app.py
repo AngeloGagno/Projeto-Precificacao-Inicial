@@ -30,7 +30,7 @@ with col2:
     )
 
 value = st.number_input(
-    "💰 **Valor da Diária**",
+    "💰 **Valor de Faturamento Anual**",
     placeholder="Digite o valor no AirDna",
     step=1,
     min_value=1000,
